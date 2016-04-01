@@ -13,4 +13,30 @@ class UsersController extends Controller
     {
     	return ['status'=>$id];
     }
+
+    public function register()
+    {
+		 // validate feilds
+        $rules = array(
+            'name' => 'required',
+            'mobile' => 'required|Integer|between:1,10',
+            'email' => 'required|email|unique:user',
+            'password' => 'required',
+            'address' => 'required',
+            'user_type' => 'required',
+            'gender' => 'required',
+            'dob' => 'required'
+        );
+
+        //check validator
+        $valid = \Validator::make(Input::all(), $rules);
+        if($valid->passes())
+        {
+            return ['status'=>'new'];
+        }
+        // if validator fails then bad request
+        else {
+            return \Response::make($valid->messages(), 400);
+        }
+    }
 }
